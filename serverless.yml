@@ -3,7 +3,15 @@ service: applause-button
 provider:
   name: aws
   runtime: nodejs8.10
-
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:BatchGetItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/Applause"
+      
 functions:
   update-claps:
     handler: src/updateClaps.fn
