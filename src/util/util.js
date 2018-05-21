@@ -32,5 +32,6 @@ module.exports = {
   isurl,
   clamp,
   assert,
-  getSourceUrl
+  getSourceUrl,
+  normalizeUrl
 };
