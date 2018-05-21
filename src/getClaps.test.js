@@ -43,6 +43,13 @@ test("removes https the url", done => {
   });
 });
 
+test("removes querystring from the url", done => {
+  getClaps(eventWithReferer(URL + "?foo=bar"), undefined, (error, response) => {
+    expect(response.body).toBe("4");
+    done();
+  });
+});
+
 test("validates that a Referer is set", done => {
   getClaps(eventWithReferer(), undefined, (error, response) => {
     expect(error).toBe("an error occurred - bad luck!");
