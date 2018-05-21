@@ -50,7 +50,8 @@ const getItems = urls =>
         }
       }
     })
-    .promise();
+    .promise()
+    .then(result => result.Responses.Applause);
 
 module.exports = {
   getItem,

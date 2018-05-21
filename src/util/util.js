@@ -16,12 +16,22 @@ const getSourceUrl = event => {
   if (!sourceUrl) {
     throw new Error("no referer specified");
   }
-  return sourceUrl;
+  return normalizeUrl(sourceUrl);
+};
+
+const normalizeUrl = url => {
+  url = url.replace(/^https?:\/\//, "");
+  const components = url.split("?");
+  if (components.length > 1) {
+    url = components[0];
+  }
+  return url;
 };
 
 module.exports = {
   isurl,
   clamp,
   assert,
-  getSourceUrl
+  getSourceUrl,
+  normalizeUrl
 };
