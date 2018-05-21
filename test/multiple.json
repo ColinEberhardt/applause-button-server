@@ -1,9 +1,6 @@
 {
   "headers": {
-    "Referer": "http://www.google.com"
+    "Referer": "www.google.com"
   },
-  "body": [
-    "http://www.google.com",
-    "http://www.google.com"
-  ]
+  "body": "[\"www.google.com\", \"www.colineberhardt.com\"]"
 }

@@ -5,6 +5,8 @@ const isurl = url => url.match(/^http:\/\/localhost:\d*\/?$/) || is.url(url);
 
 const clamp = (value, lower, upper) => Math.max(lower, Math.min(value, upper));
 
+const unique = items => Array.from(new Set(items));
+
 const assert = (truth, message) => {
   if (!truth) {
     throw new Error(`assertion failure: ${message}`);
@@ -33,5 +35,6 @@ module.exports = {
   clamp,
   assert,
   getSourceUrl,
-  normalizeUrl
+  normalizeUrl,
+  unique
 };
