@@ -1,6 +1,6 @@
 console.error = console.log = jest.fn();
 
-const URL = "http://foo.com";
+const URL = "foo.com";
 
 jest.setMock("./util/persistence", {
   getItem: url => {
@@ -29,6 +29,20 @@ test("returns the correct number of claps", done => {
   });
 });
 
+test("removes http the url", done => {
+  getClaps(eventWithReferer("http://" + URL), undefined, (error, response) => {
+    expect(response.body).toBe("4");
+    done();
+  });
+});
+
+test("removes https the url", done => {
+  getClaps(eventWithReferer("https://" + URL), undefined, (error, response) => {
+    expect(response.body).toBe("4");
+    done();
+  });
+});
+
 test("validates that a Referer is set", done => {
   getClaps(eventWithReferer(), undefined, (error, response) => {
     expect(error).toBe("an error occurred - bad luck!");
@@ -37,7 +51,7 @@ test("validates that a Referer is set", done => {
 });
 
 test("returns zero claps for an unknown URL", done => {
-  getClaps(eventWithReferer("http://fish.com"), undefined, (error, response) => {
+  getClaps(eventWithReferer("fish.com"), undefined, (error, response) => {
     expect(response.body).toBe("0");
     done();
   });

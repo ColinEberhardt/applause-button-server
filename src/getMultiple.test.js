@@ -14,7 +14,7 @@ jest.setMock("./util/persistence", {
 const getMultiple = require("./getMultiple").fn;
 
 test("returns the correct response", done => {
-  const urls = ["http://google.com", "http://microsoft.com"];
+  const urls = ["google.com", "microsoft.com"];
   getMultiple({ body: urls }, undefined, (error, response) => {
     const body = JSON.parse(response.body);
     expect(body.length).toBe(2);
@@ -32,7 +32,7 @@ test("validates that the request is an array", done => {
 test("limits the request to 100 URLs", done => {
   const urls = [];
   for (var i = 0; i < 200; i++) {
-    urls.push("http://google.com");
+    urls.push("google.com");
   }
   getMultiple({ body: urls }, undefined, (error, response) => {
     const body = JSON.parse(response.body);

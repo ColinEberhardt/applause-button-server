@@ -16,7 +16,7 @@ const getSourceUrl = event => {
   if (!sourceUrl) {
     throw new Error("no referer specified");
   }
-  return sourceUrl;
+  return sourceUrl.replace(/^https?:\/\//, "");
 };
 
 module.exports = {
