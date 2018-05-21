@@ -23,3 +23,10 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "dev" ]; then
               serverless deploy --stage dev
             fi
+
+      - run: 
+          name: Deploy production
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              serverless deploy --stage production
+            fi
