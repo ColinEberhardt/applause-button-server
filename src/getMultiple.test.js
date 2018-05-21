@@ -31,6 +31,16 @@ test("removes duplicate URLs", done => {
   });
 });
 
+test("normalises URLs", done => {
+  const urls = JSON.stringify(["http://google.com", "microsoft.com"]);
+  getMultiple({ body: urls }, undefined, (error, response) => {
+    const body = JSON.parse(response.body);
+    expect(body[0].url).toBe("google.com");
+    expect(body[1].url).toBe("microsoft.com");
+    done();
+  });
+});
+
 test("validates that the request is an array", done => {
   getMultiple({ body: "fish" }, undefined, (error, response) => {
     expect(error).toBe("an error occurred - bad luck!");
