@@ -1,7 +1,7 @@
 const is = require("is_js");
 
 // see: https://github.com/arasatasaygin/is.js/issues/154
-const isurl = url => url.match(/^http:\/\/localhost:\d*\/?$/) || is.url(url);
+const isurl = url => true;
 
 const clamp = (value, lower, upper) => Math.max(lower, Math.min(value, upper));
 
