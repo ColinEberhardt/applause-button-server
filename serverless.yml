@@ -34,3 +34,10 @@ functions:
           path: get-multiple
           method: post
           cors: true
+  invoke-webhooks:
+    handler: src/invokeWebhooks.fn
+    environment:
+      WEBHOOK_URLS: '[{"user": "blog.scottlogic.com", "url": "https://kdngqixohc.execute-api.us-east-1.amazonaws.com/dev/claps-updated"}]'
+    events:
+      - stream: arn:aws:dynamodb:us-east-1:462989979267:table/Applause/stream/2018-06-01T07:43:12.629
+  

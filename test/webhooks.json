@@ -1,0 +1,39 @@
+{
+  "Records": [
+      {
+          "eventID": "a80fba9c59068e6a50d536045d83a2f8",
+          "eventName": "MODIFY",
+          "eventVersion": "1.1",
+          "eventSource": "aws:dynamodb",
+          "awsRegion": "us-east-1",
+          "dynamodb": {
+              "ApproximateCreationDateTime": 1527960240,
+              "Keys": {
+                  "url": {
+                      "S": "blog.scottlogic.com/2009/01/21/wpf-datagrid-committing-changes-cell-by-cell.html"
+                  }
+              },
+              "NewImage": {
+                  "claps": {
+                      "N": "25"
+                  },
+                  "url": {
+                      "S": "blog.scottlogic.com/2009/01/21/wpf-datagrid-committing-changes-cell-by-cell.html"
+                  }
+              },
+              "OldImage": {
+                  "claps": {
+                      "N": "24"
+                  },
+                  "url": {
+                      "S": "blog.scottlogic.com/2009/01/21/wpf-datagrid-committing-changes-cell-by-cell.html"
+                  }
+              },
+              "SequenceNumber": "155329300000000036502472492",
+              "SizeBytes": 263,
+              "StreamViewType": "NEW_AND_OLD_IMAGES"
+          },
+          "eventSourceARN": "arn:aws:dynamodb:us-east-1:462989979267:table/Applause/stream/2018-06-01T07:43:12.629"
+      }
+  ]
+}
