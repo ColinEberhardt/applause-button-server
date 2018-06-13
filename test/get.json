@@ -2,5 +2,8 @@
   "headers": {
     "Referer": "http://google.com/"
   },
-  "body": 1
+  "body": 1,
+  "queryStringParameters": {
+    "url": "blog.scottlogic.com/2018/06/11/pros-cons-of-redux-form.html"
+  }
 }

@@ -14,11 +14,12 @@ const assert = (truth, message) => {
 };
 
 const getSourceUrl = event => {
-  const sourceUrl = event.headers && event.headers.Referer;
-  if (!sourceUrl) {
-    throw new Error("no referer specified");
+  if (event.queryStringParameters && event.queryStringParameters.url) {
+    return normalizeUrl(event.queryStringParameters.url);
+  } else if (event.headers && event.headers.Referer) {
+    return normalizeUrl(event.headers.Referer);
   }
-  return normalizeUrl(sourceUrl);
+  throw new Error("no referer or url specified");
 };
 
 const normalizeUrl = url => {

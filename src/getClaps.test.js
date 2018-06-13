@@ -29,6 +29,19 @@ test("returns the correct number of claps", done => {
   });
 });
 
+test("uses the querystring url parameter if present", done => {
+  const event = {
+    queryStringParameters: {
+      url: "foo.com"
+    },
+    headers: { Referer: "bar.com" }
+  };
+  getClaps(eventWithReferer(URL), undefined, (error, response) => {
+    expect(response.body).toBe("4");
+    done();
+  });
+});
+
 test("removes http the url", done => {
   getClaps(eventWithReferer("http://" + URL), undefined, (error, response) => {
     expect(response.body).toBe("4");

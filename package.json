@@ -3,6 +3,7 @@
     "test:get-claps": "serverless invoke local --function get-claps --path test/get.json",
     "test:update-claps": "serverless invoke local --function update-claps --path test/update.json",
     "test:get-multiple": "serverless invoke local --function get-multiple --path test/multiple.json",
+    "test:invoke-webhooks": "serverless invoke local --function invoke-webhooks --path test/webhooks.json",
     "test": "jest",
     "test:watch": "jest --watch"
   },
@@ -10,7 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.229.1",
-    "is_js": "^0.9.0"
+    "is_js": "^0.9.0",
+    "node-fetch": "^2.1.2"
   },
   "devDependencies": {
     "jest": "^22.4.4"
