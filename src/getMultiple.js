@@ -9,9 +9,14 @@ module.exports.fn = lambda(async (event, success) => {
   assert(is.array(urls), "getMultiple requires an array");
   assert(urls.every(isurl), "getMultiple requires an array of URLs");
 
+  if (urls.length === 0) {
+    success([]);
+    return;
+  }
+
   // limit the query to 100 URLs
   const normalised = unique(urls.slice(0, 100).map(normalizeUrl));
-  
+
   const items = await getItems(normalised);
   success(items);
 });

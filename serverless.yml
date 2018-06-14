@@ -36,6 +36,7 @@ functions:
           cors: true
   invoke-webhooks:
     handler: src/invokeWebhooks.fn
+    timeout: 200
     environment:
       WEBHOOK_URLS: '[{"user": "blog.scottlogic.com", "url": "https://kdngqixohc.execute-api.us-east-1.amazonaws.com/dev/claps-updated"}]'
     events:
