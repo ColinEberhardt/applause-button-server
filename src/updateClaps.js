@@ -23,7 +23,7 @@ module.exports.fn = lambda(async (event, success) => {
 
   const domain = sourceUrl.split("/")[0];
 
-  const isWhiteListed = (process.env.WHITELIST_URLS || []).includes(domain);
+  const isWhiteListed = (JSON.parse(process.env.WHITELIST_URLS) || []).includes(domain);
 
   let clapIncrement = 0;
   if (isWhiteListed) {

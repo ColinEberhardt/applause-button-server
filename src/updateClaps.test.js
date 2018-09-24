@@ -34,7 +34,11 @@ const eventWithReferer = Referer => ({
 
 describe("v1 API", () => {
   beforeEach(() => {
-    process.env.WHITELIST_URLS = ["foo.com", "bar.com", "baz.com"];
+    process.env.WHITELIST_URLS = JSON.stringify([
+      "foo.com",
+      "bar.com",
+      "baz.com"
+    ]);
     clapStore = {
       "foo.com": 1,
       "bar.com": 10
@@ -98,7 +102,7 @@ describe("v1 API", () => {
 
 describe("v2 API", () => {
   beforeEach(() => {
-    process.env.WHITELIST_URLS = [];
+    process.env.WHITELIST_URLS = JSON.stringify([]);
     clapStore = {
       "foo.com": 1,
       "bar.com": 10
@@ -109,7 +113,6 @@ describe("v2 API", () => {
   const secondsForClap = a => (WAVELENGTH * Math.asin(a / 10)) / (Math.PI * 2);
 
   test("increments existing clap counts", done => {
-
     Date.now = jest.genMockFunction().mockReturnValue(18000);
 
     // let's update by 6 claps
