@@ -35,7 +35,7 @@ module.exports.fn = lambda(async (event, success) => {
 
   let totalClaps;
 
-  console.log(`adding ${clapIncrement} claps to ${sourceUrl}`);
+  console.log(`based on an offset of ${claps}, adding ${clapIncrement} claps to ${sourceUrl}`);
 
   const item = await getItem(sourceUrl);
 
