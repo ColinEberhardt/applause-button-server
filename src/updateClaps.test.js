@@ -1,28 +1,29 @@
-console.error = console.log = jest.fn();
+// console.error = console.log = jest.fn();
 
-const clapStore = {
-  "foo.com": 1,
-  "bar.com": 10
-};
+let clapStore;
 
 jest.setMock("./util/persistence", {
   getItem: url => {
     return Promise.resolve(
       clapStore[url]
         ? {
-            Item: { claps: clapStore[url] }
+            Item: { ...clapStore[url] }
           }
         : {}
     );
   },
-  incrementClaps: (url, claps) => {
-    clapStore[url] += claps;
+  incrementClaps: (url, claps, sourceIp) => {
+    clapStore[url].claps += claps;
+    clapStore[url].sourceIp = sourceIp;
     return Promise.resolve({
       Item: { claps: clapStore[url] }
     });
   },
-  putItem: (url, claps) => {
-    clapStore[url] = claps;
+  putItem: (url, claps, sourceIp) => {
+    clapStore[url] = {
+      claps,
+      sourceIp
+    };
     return Promise.resolve({
       Item: { claps: clapStore[url] }
     });
@@ -31,8 +32,55 @@ jest.setMock("./util/persistence", {
 
 const updateClaps = require("./updateClaps").fn;
 
-const eventWithReferer = Referer => ({
-  headers: { Referer }
+const eventWithReferer = (Referer, sourceIp = "1.2.3.4") => ({
+  headers: { Referer },
+  requestContext: {
+    identity: { sourceIp }
+  }
+});
+
+beforeEach(() => {
+  clapStore = {
+    "foo.com": {
+      claps: 1,
+      sourceIp: "0.0.0.0"
+    },
+    "bar.com": {
+      claps: 10,
+      sourceIp: "0.0.0.0"
+    }
+  };
+});
+
+const foo = data =>
+  new Promise((resolve, reject) => {
+    updateClaps(data, undefined, (error, response) => {
+      resolve(response);
+    });
+  });
+
+test.only("prevents multiple updates from the same IP", async done => {
+  // clap once
+  let response = await foo({
+    ...eventWithReferer("foo.com", "1.5.6.7"),
+    body: 1
+  });
+
+  expect(clapStore["foo.com"].claps).toBe(2);
+  expect(response.body).toBe("2");
+
+  console.log(clapStore);
+
+  // clap again from the same IP
+  response = await foo({
+    ...eventWithReferer("foo.com", "1.5.6.7"),
+    body: 1
+  });
+
+  expect(clapStore["foo.com"].claps).toBe(2);
+  expect(response.body).toBe("2");
+
+  done();
 });
 
 test("increments existing clap counts", done => {
@@ -40,7 +88,19 @@ test("increments existing clap counts", done => {
     { ...eventWithReferer("foo.com"), body: 1 },
     undefined,
     (error, response) => {
-      expect(clapStore["foo.com"]).toBe(2);
+      expect(clapStore["foo.com"].claps).toBe(2);
+      expect(response.body).toBe("2");
+      done();
+    }
+  );
+});
+
+test("increments existing clap counts", done => {
+  updateClaps(
+    { ...eventWithReferer("foo.com"), body: 1 },
+    undefined,
+    (error, response) => {
+      expect(clapStore["foo.com"].claps).toBe(2);
       expect(response.body).toBe("2");
       done();
     }
@@ -52,7 +112,7 @@ test("clamps the provided clap count", done => {
     { ...eventWithReferer("bar.com"), body: 100 },
     undefined,
     (error, response) => {
-      expect(clapStore["bar.com"]).toBe(20);
+      expect(clapStore["bar.com"].claps).toBe(20);
       expect(response.body).toBe("20");
       done();
     }
@@ -82,7 +142,7 @@ test("inserts a new item if the given URL has not been incremented before", done
     { ...eventWithReferer("baz.com"), body: 10 },
     undefined,
     (error, response) => {
-      expect(clapStore["baz.com"]).toBe(10);
+      expect(clapStore["baz.com"].claps).toBe(10);
       expect(response.body).toBe("10");
       done();
     }

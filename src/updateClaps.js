@@ -17,12 +17,22 @@ module.exports.fn = lambda(async (event, success) => {
 
   const item = await getItem(sourceUrl);
 
+  const sourceIp = event.requestContext.identity.sourceIp;
+
   if (item.Item) {
-    totalClaps = item.Item.claps + clapIncrement;
-    await incrementClaps(sourceUrl, clapIncrement);
+    const clapStats = item.Item;
+    if (clapStats.sourceIp && clapStats.sourceIp === sourceIp) {
+      totalClaps = clapStats.claps;
+      console.log(
+        `multiple claps from the same sourceIp prohibited ${clapStats.sourceIp}`
+      );
+    } else {
+      totalClaps = clapStats.claps + clapIncrement;
+      await incrementClaps(sourceUrl, clapIncrement, sourceIp);
+    }
   } else {
     totalClaps = clapIncrement;
-    await putItem(sourceUrl, clapIncrement);
+    await putItem(sourceUrl, clapIncrement, sourceIp);
   }
 
   success(totalClaps);
