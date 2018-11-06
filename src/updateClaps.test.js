@@ -1,4 +1,4 @@
-// console.error = console.log = jest.fn();
+console.error = console.log = jest.fn();
 
 let clapStore;
 
@@ -59,7 +59,7 @@ const foo = data =>
     });
   });
 
-test.only("prevents multiple updates from the same IP", async done => {
+test("prevents multiple updates from the same IP", async done => {
   // clap once
   let response = await foo({
     ...eventWithReferer("foo.com", "1.5.6.7"),
@@ -95,25 +95,28 @@ test("increments existing clap counts", done => {
   );
 });
 
-test("increments existing clap counts", done => {
-  updateClaps(
-    { ...eventWithReferer("foo.com"), body: 1 },
-    undefined,
-    (error, response) => {
-      expect(clapStore["foo.com"].claps).toBe(2);
-      expect(response.body).toBe("2");
-      done();
-    }
-  );
-});
-
-test("clamps the provided clap count", done => {
+test("clamps the provided clap count to upper bound", done => {
   updateClaps(
     { ...eventWithReferer("bar.com"), body: 100 },
     undefined,
     (error, response) => {
       expect(clapStore["bar.com"].claps).toBe(20);
       expect(response.body).toBe("20");
+      done();
+    }
+  );
+});
+
+test("clamps the provided clap count to lower bound", done => {
+  updateClaps(
+    // this tests the v2.0.0 behaviour with temporal offsets - the idea
+    // being that for peopel that have not migrated to v3.0.0, we still want to 
+    // increment claps
+    { ...eventWithReferer("bar.com"), body: -39.95835787266851 },
+    undefined,
+    (error, response) => {
+      expect(clapStore["bar.com"].claps).toBe(11);
+      expect(response.body).toBe("11");
       done();
     }
   );
