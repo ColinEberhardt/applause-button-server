@@ -14,27 +14,29 @@ const getItem = url =>
     })
     .promise();
 
-const putItem = (url, claps) =>
+const putItem = (url, claps, sourceIp) =>
   dynamoClient
     .put({
       TableName: TABLE,
       Item: {
         url,
-        claps
+        claps,
+        sourceIp
       }
     })
     .promise();
 
-const incrementClaps = (url, claps) =>
+const incrementClaps = (url, claps, sourceIp) =>
   dynamoClient
     .update({
       TableName: TABLE,
       Key: {
         url
       },
-      UpdateExpression: "SET claps = claps + :inc",
+      UpdateExpression: "SET claps = claps + :inc, sourceIp = :ip",
       ExpressionAttributeValues: {
-        ":inc": claps
+        ":inc": claps,
+        ":ip": sourceIp
       }
     })
     .promise();
