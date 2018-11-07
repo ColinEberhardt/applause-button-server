@@ -107,19 +107,33 @@ test("clamps the provided clap count to upper bound", done => {
   );
 });
 
-test("clamps the provided clap count to lower bound", done => {
-  updateClaps(
-    // this tests the v2.0.0 behaviour with temporal offsets - the idea
-    // being that for peopel that have not migrated to v3.0.0, we still want to 
-    // increment claps
-    { ...eventWithReferer("bar.com"), body: -39.95835787266851 },
-    undefined,
-    (error, response) => {
-      expect(clapStore["bar.com"].claps).toBe(11);
-      expect(response.body).toBe("11");
-      done();
-    }
-  );
+describe("legacy functionality, always register a single clap", () => {
+  test("clamped", done => {
+    updateClaps(
+      { ...eventWithReferer("bar.com"), body: -39.95835787266851 },
+      undefined,
+      (error, response) => {
+        expect(clapStore["bar.com"].claps).toBe(11);
+        expect(response.body).toBe("11");
+        done();
+      }
+    );
+  });
+
+  test("within range", done => {
+    updateClaps(
+      // this tests the v2.0.0 behaviour with temporal offsets - the idea
+      // being that for peopel that have not migrated to v3.0.0, we still want to
+      // increment claps
+      { ...eventWithReferer("bar.com"), body: 9.95835787266851 },
+      undefined,
+      (error, response) => {
+        expect(clapStore["bar.com"].claps).toBe(11);
+        expect(response.body).toBe("11");
+        done();
+      }
+    );
+  });
 });
 
 test("allows requests where the body is a string", done => {
@@ -136,7 +150,7 @@ test("allows requests where the body is a string", done => {
 
 test("allows requests where the body also contains a version number", done => {
   updateClaps(
-    { ...eventWithReferer("foo.com"), body: "\"4,3.0.0\"" },
+    { ...eventWithReferer("foo.com"), body: '"4,3.0.0"' },
     undefined,
     (error, response) => {
       expect(clapStore["foo.com"].claps).toBe(5);

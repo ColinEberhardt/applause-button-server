@@ -7,8 +7,14 @@ module.exports.fn = lambda(async (event, success) => {
   const sourceUrl = getSourceUrl(event);
 
   const body = JSON.parse(event.body);
-  const claps =
+  let claps =
     typeof body === "string" ? Number(body.split(",")[0]) : Number(body);
+
+  // for the v2.0.0 behaviour, where the clap count was a termporal offset, always
+  // treat this as a single clap
+  if (is.not.integer(claps)) {
+    claps = 1;
+  }
 
   assert(isurl(sourceUrl), `Referer is not a URL [${sourceUrl}]`);
   assert(is.not.nan(claps), `Clap count was not a number`);
