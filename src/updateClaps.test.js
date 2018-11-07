@@ -122,6 +122,30 @@ test("clamps the provided clap count to lower bound", done => {
   );
 });
 
+test("allows requests where the body is a string", done => {
+  updateClaps(
+    { ...eventWithReferer("foo.com"), body: "4" },
+    undefined,
+    (error, response) => {
+      expect(clapStore["foo.com"].claps).toBe(5);
+      expect(response.body).toBe("5");
+      done();
+    }
+  );
+});
+
+test("allows requests where the body also contains a version number", done => {
+  updateClaps(
+    { ...eventWithReferer("foo.com"), body: "4,v3.0.0" },
+    undefined,
+    (error, response) => {
+      expect(clapStore["foo.com"].claps).toBe(5);
+      expect(response.body).toBe("5");
+      done();
+    }
+  );
+});
+
 test("validates that the referer is a URL", done => {
   updateClaps(eventWithReferer("cat"), undefined, (error, response) => {
     expect(error).toBe("an error occurred - bad luck!");
