@@ -5,7 +5,10 @@ const { isurl, getSourceUrl, assert, clamp } = require("./util/util");
 
 module.exports.fn = lambda(async (event, success) => {
   const sourceUrl = getSourceUrl(event);
-  const claps = Number(String(event.body).split(",")[0]);
+
+  const body = JSON.parse(event.body);
+  const claps =
+    typeof body === "string" ? Number(body.split(",")[0]) : Number(body);
 
   assert(isurl(sourceUrl), `Referer is not a URL [${sourceUrl}]`);
   assert(is.not.nan(claps), `Clap count was not a number`);

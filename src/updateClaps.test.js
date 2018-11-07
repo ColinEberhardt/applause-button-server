@@ -136,7 +136,7 @@ test("allows requests where the body is a string", done => {
 
 test("allows requests where the body also contains a version number", done => {
   updateClaps(
-    { ...eventWithReferer("foo.com"), body: "4,v3.0.0" },
+    { ...eventWithReferer("foo.com"), body: "\"4,3.0.0\"" },
     undefined,
     (error, response) => {
       expect(clapStore["foo.com"].claps).toBe(5);
