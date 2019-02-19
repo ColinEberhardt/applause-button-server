@@ -1,7 +1,7 @@
-const is = require("is_js");
 const lambda = require("./util/lambda");
 const { getItem } = require("./util/persistence");
 const { isurl, getSourceUrl, assert } = require("./util/util");
+const { attributeCosts } = require("./util/attributeCosts");
 
 module.exports.fn = lambda(async (event, success) => {
   // robots do not include Referer, so fail fast
@@ -14,6 +14,21 @@ module.exports.fn = lambda(async (event, success) => {
   assert(isurl(sourceUrl), `Referer is not a URL [${sourceUrl}]`);
 
   const item = await getItem(sourceUrl);
+
+  const consumer = sourceUrl.split("/")[0];
+
+  // cost metrics
+  // 80k invocations per day, at a cost of $1.2
+  const invocationsPerDay = 80000;
+  const dailyRunningCost = 1.2;
+  const percentOfRequestsToAttribute = 1;
+  if (Math.random() < percentOfRequestsToAttribute) {
+    attributeCosts(
+      consumer,
+      dailyRunningCost / (invocationsPerDay * percentOfRequestsToAttribute)
+    );
+  }
+
   if (item.Item) {
     success(item.Item.claps);
   } else {
