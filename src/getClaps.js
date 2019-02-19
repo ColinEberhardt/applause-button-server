@@ -21,7 +21,7 @@ module.exports.fn = lambda(async (event, success) => {
   // 80k invocations per day, at a cost of $1.2
   const invocationsPerDay = 80000;
   const dailyRunningCost = 1.2;
-  const percentOfRequestsToAttribute = 1;
+  const percentOfRequestsToAttribute = 0.01;
   if (Math.random() < percentOfRequestsToAttribute) {
     attributeCosts(
       consumer,
