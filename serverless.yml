@@ -41,6 +41,13 @@ functions:
           path: get-multiple
           method: post
           cors: true
+  get-cost-attribution:
+    handler: src/getCostAttribution.fn
+    events:
+      - http:
+          path: get-cost-attribution
+          method: get
+          cors: true
   invoke-webhooks:
     handler: src/invokeWebhooks.fn
     timeout: 200

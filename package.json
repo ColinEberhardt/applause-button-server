@@ -1,7 +1,7 @@
 {
   "scripts": {
+    "test:get-cost-attribution": "serverless invoke local --function get-cost-attribution",
     "test:get-claps": "serverless invoke local --function get-claps --path test/get.json",
-    "test:remote:get-claps": "serverless invoke --function get-claps --path test/get.json --stage dev",
     "test:update-claps": "serverless invoke local --function update-claps --path test/update.json",
     "test:get-multiple": "serverless invoke local --function get-multiple --path test/multiple.json",
     "test:invoke-webhooks": "serverless invoke local --function invoke-webhooks --path test/webhooks.json",
