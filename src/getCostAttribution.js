@@ -7,12 +7,5 @@ module.exports.fn = lambda(async (_, success) => {
   // top 10 sorted by cost
   consumers.sort((i, j) => j.cost - i.cost);
   consumers = consumers.slice(0, 10);
-
-  console.log(consumers);
-
-  if (item.Item) {
-    success(item.Item);
-  } else {
-    success(0);
-  }
+  success(consumers);
 });
