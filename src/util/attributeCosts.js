@@ -4,6 +4,30 @@ const AWS = require("aws-sdk");
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
 AWS.config.setPromisesDependency(Promise);
 
+const getCostAttribution = () => {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const date =
+    yesterday.getFullYear() +
+    "-" +
+    yesterday.getMonth() +
+    "-" +
+    yesterday.getDate();
+
+  return dynamoClient
+    .scan({
+      TableName,
+      FilterExpression: "#yesterday = :yesterday",
+      ExpressionAttributeValues: {
+        ":yesterday": date
+      },
+      ExpressionAttributeNames: {
+        "#yesterday": "date"
+      }
+    })
+    .promise();
+};
+
 const attributeCosts = async (consumer, cost) => {
   const today = new Date();
   const date =
@@ -48,5 +72,6 @@ const attributeCosts = async (consumer, cost) => {
 };
 
 module.exports = {
-  attributeCosts
+  attributeCosts,
+  getCostAttribution
 };
