@@ -2,7 +2,7 @@ service: applause-button
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs14.x
   iamRoleStatements:
     - Effect: Allow
       Action:
