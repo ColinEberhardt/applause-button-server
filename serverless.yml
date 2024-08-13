@@ -2,7 +2,9 @@ service: applause-button
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs20.x
+  region: eu-west-2
+  profile: applause-button-serverless
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -11,15 +13,6 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:BatchGetItem
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/Applause"
-    - Effect: Allow
-      Action:
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:BatchGetItem
-        - dynamodb:Scan
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/OpenService"
-      
 functions:
   update-claps:
     handler: src/updateClaps.fn
@@ -41,13 +34,6 @@ functions:
       - http:
           path: get-multiple
           method: post
-          cors: true
-  get-cost-attribution:
-    handler: src/getCostAttribution.fn
-    events:
-      - http:
-          path: get-cost-attribution
-          method: get
           cors: true
   invoke-webhooks:
     handler: src/invokeWebhooks.fn
